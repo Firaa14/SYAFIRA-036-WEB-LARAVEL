@@ -4,12 +4,13 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Laravel</title>
+    <title>@yield('title')</title>
 </head>
 
 <body>
+    @yield('header')
     @yield('main')
-    @yield('footer')
+    <footer>© 2025 Vokasi UB</footer>
 </body>
 
 </html>

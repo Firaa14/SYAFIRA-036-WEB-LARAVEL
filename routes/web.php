@@ -1,8 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\haiController;
+use App\Http\Controllers\KategoriBukuController;
 
 Route::get('/hai', function () {
-    $prodi = ['DKV', 'TI', 'Administrasi Bisnis'];
-    return view('selamat.hai', ['namaprodi' => $prodi]);
+    return view('welcome');
 });
+
+Route::get('/hai', [haiController::class, 'index']);
+Route::get(
+    '/kategori-buku',
+    [KategoriBukuController::class, 'index']
+);
+Route::get('/kategori-buku/tambah', [KategoriBukuController::class, 'create']);
+Route::post('/kategori-buku', [KategoriBukuController::class, 'store']);
