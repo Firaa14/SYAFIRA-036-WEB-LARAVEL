@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\KategoriBuku;
 
 class KategoriBukuController extends Controller
 {
@@ -11,7 +12,16 @@ class KategoriBukuController extends Controller
      */
     public function index()
     {
-        return view('kategori-buku.buku');
+        $data_kategori_buku = KategoriBuku::all()
+            ->sortBy('kategori_buku');
+        $jumlah_data = $data_kategori_buku->count();
+        return view(
+            'kategori-buku.tampil',
+            [
+                'KategoriBuku' => $data_kategori_buku,
+                'JumlahKategoriBuku' => $jumlah_data
+            ]
+        );
     }
 
     /**
@@ -27,39 +37,38 @@ class KategoriBukuController extends Controller
      */
     public function store(Request $request)
     {
-        $kategori_buku = $request->kategori_buku;
-        return $kategori_buku;
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+        $kategori = KategoriBuku::create($request->all());
+        return redirect('/kategori-buku');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $data_kategori_buku = KategoriBuku::find($id);
+        return view('kategori-buku.edit', [
+            'KategoriBuku' =>
+                $data_kategori_buku
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        KategoriBuku::where('id_kategori_buku', $id)->update(['kategori_buku' => $request->kategori_buku]);
+        return redirect('/kategori-buku');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $data_kategori_buku = KategoriBuku::find($id);
+        $data_kategori_buku->delete();
+        return redirect('/kategori-buku');
     }
 }
