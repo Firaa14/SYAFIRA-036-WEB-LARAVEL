@@ -1,61 +1,53 @@
 @extends('template')
-
 @section('title')
     Penerbit
 @endsection
-
 @section('header')
     <h4>Penerbit</h4>
 @endsection
-
 @section('main')
-    <table border="1" cellpadding="5" cellspacing="0">
+    <table border='1'>
         <thead>
-            <tr>
-                <th>No</th>
-                <th>Penerbit</th>
-                <th>Alamat</th>
-                <th>Aksi Edit</th>
-                <th>Aksi Hapus</th>
-            </tr>
+            <th>No</th>
+            <th>Penerbit</th>
+            <th>Alamat</th>
+            <th>No Telp</th>
+            <th>Aksi Edit</th>
+            <th>Aksi Hapus</th>
         </thead>
         <tbody>
-            @if (!empty($PenerbitBuku) && count($PenerbitBuku) > 0)
+            @if (!empty($PenerbitBuku))
+                @php
+                    $i = 1
+                @endphp
                 @foreach($PenerbitBuku as $key => $Penerbit)
                     <tr>
-                        <td>{{ $key + 1 }}</td>
+                        <td>{{ $i }}</td>
                         <td>{{ $Penerbit->penerbit }}</td>
                         <td>{{ $Penerbit->alamat }}</td>
-                        <td>
-                            <a href="{{ url('/penerbit/' . $Penerbit->id_penerbit . '/edit') }}">
-                                <input type="button" value="Edit" />
-                            </a>
-                        </td>
+                        <td>{{ $Penerbit->telepon->telepon ?? '-' }}</td>
+                        <td><a href="{{ url('/penerbit/' . $Penerbit->id_penerbit . '/edit') }}">
+                                <input type="button" value="Edit" /></a></td>
+
                         <td>
                             <form action="{{ url('/penerbit/' . $Penerbit->id_penerbit) }}" method="POST"
                                 onsubmit="return confirm('Apakah data ingin dihapus?')">
                                 @csrf
-                                @method('DELETE')
+                                <input type="hidden" value="DELETE" name="_method">
+
                                 <input type="submit" value="Delete" />
                             </form>
                         </td>
                     </tr>
+                    @php
+                        $i++
+                    @endphp
                 @endforeach
             @else
-                <tr>
-                    <td colspan="5" align="center">Tidak ada data Penerbit</td>
-                </tr>
+                <p>Tidak ada data Penerbit</p>
             @endif
-        </tbody>
+        <tbody>
     </table>
-    @if (!empty($JumlahPenerbitBuku))
-        @foreach($JumlahPenerbitBuku as $Jumlah)
-            <p>Jumlah Data {{ $Jumlah->penerbit }}: {{ $Jumlah->jumlah_penerbit }}</p>
-        @endforeach
-    @endif
-    <a href="{{ url('/penerbit/create') }}">Tambah Penerbit</a>
-@endsection
-
-@section('footer')
-    <footer>© 2024 Vokasi UB</footer>
+    <p>Jumlah Data : {{ $JumlahPenerbitBuku }}</p>
+    <a href="{{url('/penerbit.create')}}">Tambah Penerbit</a>
 @endsection

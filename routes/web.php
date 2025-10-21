@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\haiController;
 use App\Http\Controllers\KategoriBukuController;
+use App\Http\Controllers\BukuController;
 use App\Http\Controllers\PenerbitController;
 use App\Http\Controllers\TagController;
 
@@ -33,3 +34,9 @@ Route::post('/kategori-buku', [KategoriBukuController::class, 'store']);
 Route::get('/kategori-buku.{id}.edit', [KategoriBukuController::class, 'edit']);
 Route::put('/kategori-buku.{id}', [KategoriBukuController::class, 'update']);
 Route::delete('/kategori-buku/{id}', [KategoriBukuController::class, 'destroy']);
+Route::get('/buku', [BukuController::class, 'index']);
+Route::get('/buku.create', [BukuController::class, 'create']);
+Route::post('/buku', [BukuController::class, 'store']);
+Route::get('/buku/{id}/edit', [BukuController::class, 'edit']);
+Route::put('/buku/{id}', [BukuController::class, 'update']);
+Route::delete('/buku/{id}', [BukuController::class, 'destroy']);

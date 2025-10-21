@@ -1,19 +1,29 @@
 @extends('template')
 @section('title')
-    Kategori Buku
+    Buku
 @endsection
 @section('header')
-    <h4>Tambah Kategori Buku</h4>
+    <h4>Tambah Buku</h4>
 @endsection
 @section('main')
-    <form action="{{ url('kategori-buku') }}" method="POST">
+    <form action="{{ url('/buku') }}" method="POST">
         @csrf
-        <label>Nama Kategori Buku</label>
-        <input type="text" name="kategori_buku"><br>
+        <label>Kategori Buku</label>
+        <select name="kategori">
+            @if (!empty($DataKategori))
+                @foreach($DataKategori as $key => $Kategori)
+                    <option value="{{ $Kategori->id_kategori_buku }}">
+                        {{ $Kategori->kategori_buku }}
+                    </option>
+                @endforeach
+            @endif
+        </select><br><br>
+        <label>Judul Buku</label>
+        <textarea name="judul"></textarea><br><br>
+        <label>Pengarang</label>
+        <textarea name="pengarang"></textarea><br><br>
+        <label>Tahun Terbit</label>
+        <input type="number" name="tahun_terbit"><br><br>
         <input type="submit" value="Simpan">
     </form>
-@endsection
-
-@section('footer')
-    <footer>© 2024 Vokasi UB</footer>
 @endsection

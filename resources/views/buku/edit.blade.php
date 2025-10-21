@@ -1,5 +1,4 @@
 @extends('template')
-
 @section('title')
     Buku
 @endsection

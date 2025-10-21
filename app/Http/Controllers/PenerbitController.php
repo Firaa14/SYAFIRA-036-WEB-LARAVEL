@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Penerbit;
 
 class PenerbitController extends Controller
 {
@@ -13,16 +14,10 @@ class PenerbitController extends Controller
      */
     public function index()
     {
-        $data_penerbit = DB::table('penerbit')->select('*')
-            ->orderBy('penerbit', 'ASC')->get();
-        $jumlah_data = DB::table('penerbit')->select(
-            'penerbit',
-            DB::raw('COUNT(penerbit) as jumlah_penerbit')
-        )
-            ->groupBy('penerbit')->get();
+        $data_penerbit = Penerbit::with('telepon')->get();
+        $jumlah_data = $data_penerbit->count();
         return view('penerbit.tampil', [
-            'PenerbitBuku' =>
-                $data_penerbit,
+            'PenerbitBuku' => $data_penerbit,
             'JumlahPenerbitBuku' => $jumlah_data
         ]);
     }
@@ -40,11 +35,10 @@ class PenerbitController extends Controller
      */
     public function store(Request $request)
     {
-        $dataPenerbit = array(
-            'penerbit' => $request->penerbit,
-            'alamat' => $request->alamat
-        );
-        DB::table('penerbit')->insert($dataPenerbit);
+        $penerbit = Penerbit::create($request->only(['penerbit', 'alamat']));
+        if ($request->filled('telepon')) {
+            $penerbit->telepon()->create(['telepon' => $request->telepon]);
+        }
         return redirect('/penerbit');
     }
 
@@ -61,8 +55,11 @@ class PenerbitController extends Controller
      */
     public function edit(string $id)
     {
-        $penerbit = DB::table('penerbit')->where('id_penerbit', $id)->first();
-        return view('penerbit.edit', ['PenerbitBuku' => $penerbit]);
+        $data_penerbit = Penerbit::find($id);
+        return view('penerbit.edit', [
+            'PenerbitBuku' =>
+                $data_penerbit
+        ]);
     }
 
     /**
@@ -70,11 +67,15 @@ class PenerbitController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $dataPenerbit = [
-            'penerbit' => $request->penerbit,
-            'alamat' => $request->alamat
-        ];
-        DB::table('penerbit')->where('id_penerbit', $id)->update($dataPenerbit);
+        $penerbit = Penerbit::find($id);
+        $penerbit->update($request->only(['penerbit', 'alamat']));
+        $telepon = $penerbit->telepon;
+        if ($telepon) {
+            $telepon->telepon = $request->no_telp;
+            $telepon->save();
+        } else if ($request->filled('no_telp')) {
+            $penerbit->telepon()->create(['telepon' => $request->no_telp]);
+        }
         return redirect('/penerbit');
     }
 

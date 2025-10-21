@@ -3,7 +3,7 @@
     Buku
 @endsection
 @section('header')
-    <h4>Buku</h4>
+    <h4>Daftar Buku</h4>
 @endsection
 @section('main')
     <table border='1'>
@@ -17,11 +17,9 @@
             <th>Aksi Hapus</th>
         </thead>
         <tbody>
-            @if (!empty($DataBuku))
-                @php
-                    $i = 1
-                @endphp
-                @foreach($DataBuku as $key => $Buku)
+            @if (!empty($DataBuku) && count($DataBuku) > 0)
+                @php $i = 1; @endphp
+                @foreach($DataBuku as $Buku)
                     <tr>
                         <td>{{ $i }}</td>
                         <td>{{ $Buku->kategori->kategori_buku ?? '-' }}</td>
@@ -35,19 +33,18 @@
                                 onsubmit="return confirm('Apakah data ingin dihapus?')">
                                 @csrf
                                 <input type="hidden" value="DELETE" name="_method">
-
                                 <input type="submit" value="Delete" />
                             </form>
                         </td>
                     </tr>
-                    @php
-                        $i++
-                    @endphp
+                    @php $i++; @endphp
                 @endforeach
             @else
-                <p>Tidak ada data Buku</p>
+                <tr>
+                    <td colspan="7">Tidak ada data Buku</td>
+                </tr>
             @endif
-        <tbody>
+        </tbody>
     </table>
-    <a href="{{url('/buku.create')}}">Tambah Buku</a>
+    <a href="{{ url('/buku.create') }}">Tambah Buku</a>
 @endsection

@@ -12,16 +12,10 @@ class KategoriBukuController extends Controller
      */
     public function index()
     {
-        $data_kategori_buku = KategoriBuku::all()
-            ->sortBy('kategori_buku');
-        $jumlah_data = $data_kategori_buku->count();
-        return view(
-            'kategori-buku.tampil',
-            [
-                'KategoriBuku' => $data_kategori_buku,
-                'JumlahKategoriBuku' => $jumlah_data
-            ]
-        );
+        $data_buku = \App\Models\Buku::with('kategori')->get();
+        return view('kategori-buku.tampil', [
+            'DataBuku' => $data_buku
+        ]);
     }
 
     /**
