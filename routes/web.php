@@ -29,13 +29,17 @@ Route::post('/tag', [TagController::class, 'store']);
 Route::get('/tag/{id}/edit', [TagController::class, 'edit']);
 Route::put('/tag/{id}', [TagController::class, 'update']);
 Route::delete('/tag/{id}', [TagController::class, 'destroy']);
-Route::get('/kategori-buku.create', [KategoriBukuController::class, 'create']);
+// Kategori Buku RESTful routes
+Route::get('/kategori-buku', [KategoriBukuController::class, 'index']);
+Route::get('/kategori-buku/tambah', [KategoriBukuController::class, 'create']);
 Route::post('/kategori-buku', [KategoriBukuController::class, 'store']);
-Route::get('/kategori-buku.{id}.edit', [KategoriBukuController::class, 'edit']);
-Route::put('/kategori-buku.{id}', [KategoriBukuController::class, 'update']);
+Route::get('/kategori-buku/{id}/edit', [KategoriBukuController::class, 'edit']);
+Route::put('/kategori-buku/{id}', [KategoriBukuController::class, 'update']);
 Route::delete('/kategori-buku/{id}', [KategoriBukuController::class, 'destroy']);
+
+// Buku RESTful routes
 Route::get('/buku', [BukuController::class, 'index']);
-Route::get('/buku.create', [BukuController::class, 'create']);
+Route::get('/buku/create', [BukuController::class, 'create']);
 Route::post('/buku', [BukuController::class, 'store']);
 Route::get('/buku/{id}/edit', [BukuController::class, 'edit']);
 Route::put('/buku/{id}', [BukuController::class, 'update']);

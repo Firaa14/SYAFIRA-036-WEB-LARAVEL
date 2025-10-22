@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Buku;
 use App\Models\KategoriBuku;
+use App\Models\Tag;
 
 class BukuController extends Controller
 {
@@ -24,7 +25,11 @@ class BukuController extends Controller
     {
         $data_kategori = KategoriBuku::orderBy('kategori_buku', 'asc')
             ->get();
-        return view('buku.tambah', ['DataKategori' => $data_kategori]);
+        $data_tag = Tag::orderBy('tag', 'asc')->get();
+        return view('buku.tambah', [
+            'DataKategori' => $data_kategori,
+            'DataTag' => $data_tag
+        ]);
     }
 
     /**
@@ -32,15 +37,14 @@ class BukuController extends Controller
      */
     public function store(Request $request)
     {
-        $data = [
-            'judul' => $request->input('judul'),
-            'pengarang' => $request->input('pengarang'),
-            'tahun_terbit' => $request->input('tahun_terbit'),
-            'id_kategori_buku' => $request->input('id_kategori_buku'),
-        ];
-        \Log::info(json_encode($data));
-        Buku::create($data);
-        return redirect('/kategori-buku');
+        $buku = new Buku;
+        $buku->id_kategori_buku = $request->id_kategori_buku;
+        $buku->judul = $request->judul;
+        $buku->pengarang = $request->pengarang;
+        $buku->tahun_terbit = $request->tahun_terbit;
+        $buku->save();
+        $buku->tag()->attach($request->input("list_buku"));
+        return redirect('/buku');
     }
 
     /**
@@ -59,9 +63,13 @@ class BukuController extends Controller
         $data_buku = Buku::find($id);
         $data_kategori =
             KategoriBuku::orderBy('kategori_buku', 'asc')->get();
+        $data_tag = Tag::orderBy('tag', 'asc')->get();
+        $tag_buku = $data_buku->tag->pluck('id_tag')->toArray();
         return view('buku.edit', [
             'DataBuku' => $data_buku,
-            'DataKategori' => $data_kategori
+            'DataKategori' => $data_kategori,
+            'DataTag' => $data_tag,
+            'TagBuku' => $tag_buku
         ]);
     }
 
@@ -76,6 +84,7 @@ class BukuController extends Controller
         $buku->pengarang = $request->pengarang;
         $buku->tahun_terbit = $request->tahun_terbit;
         $buku->save();
+        $buku->tag()->sync($request->input("list_buku"));
         return redirect('/buku');
     }
 

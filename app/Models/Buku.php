@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -16,5 +15,10 @@ class Buku extends Model
     public function kategori()
     {
         return $this->belongsTo(KategoriBuku::class, 'id_kategori_buku');
+    }
+
+    public function tag()
+    {
+        return $this->belongsToMany(Tag::class, 'tag_buku', 'id_buku', 'id_tag');
     }
 }

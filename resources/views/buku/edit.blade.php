@@ -12,9 +12,11 @@
         <label>Kategori Buku</label>
         <select name="id_kategori_buku">
             @if (!empty($DataKategori))
-                @foreach($DataKategori as $key => $Kategori)
+                @foreach($DataKategori as $Kategori)
                     <option value="{{ $Kategori->id_kategori_buku }}" @if ($Kategori->id_kategori_buku == $DataBuku->id_kategori_buku)
-                    selected @endif>{{ $Kategori->kategori_buku }}</option>
+                    selected @endif>
+                        {{ $Kategori->kategori_buku }}
+                    </option>
                 @endforeach
             @endif
         </select><br><br>
@@ -24,6 +26,14 @@
         <textarea name="pengarang">{{ $DataBuku->pengarang}}</textarea><br><br>
         <label>Tahun Terbit</label>
         <input type="number" name="tahun_terbit" value="{{ $DataBuku->tahun_terbit}}"><br><br>
+
+        @if (!empty($DataTag))
+            @foreach($DataTag as $Tag)
+                <input type="checkbox" name="list_buku[]" value="{{ $Tag->id_tag }}" @if (in_array($Tag->id_tag, $TagBuku ?? []))
+                checked @endif>
+                {{ $Tag->tag }}
+            @endforeach
+        @endif
         <input type="submit" value="Simpan">
     </form>
 @endsection

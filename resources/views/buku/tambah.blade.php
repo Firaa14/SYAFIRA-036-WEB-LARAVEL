@@ -1,6 +1,6 @@
 @extends('template')
 @section('title')
-    Tambah Buku
+    Buku
 @endsection
 @section('header')
     <h4>Tambah Buku</h4>
@@ -10,16 +10,27 @@
         @csrf
         <label>Kategori Buku</label>
         <select name="id_kategori_buku">
-            @foreach($DataKategori ?? [] as $kategori)
-                <option value="{{ $kategori->id_kategori_buku }}">{{ $kategori->kategori_buku }}</option>
-            @endforeach
+            @if (!empty($DataKategori))
+                @foreach($DataKategori as $key => $Kategori)
+                    <option value="{{ $Kategori->id_kategori_buku }}">
+
+                        {{ $Kategori->kategori_buku }}
+                    </option>
+                @endforeach
+            @endif
         </select><br><br>
         <label>Judul Buku</label>
-        <input type="text" name="judul"><br><br>
+        <textarea name="judul"></textarea><br><br>
         <label>Pengarang</label>
-        <input type="text" name="pengarang"><br><br>
+        <textarea name="pengarang"></textarea><br><br>
         <label>Tahun Terbit</label>
-        <input type="text" name="tahun_terbit"><br><br>
+        <input type="number" name="tahun_terbit"><br><br>
+        @if (!empty($DataTag))
+            @foreach($DataTag as $key => $Tag)
+                <input type="checkbox" name="list_buku[]" value="{{ $Tag->id_tag }}">
+                {{ $Tag->tag }}
+            @endforeach
+        @endif
         <input type="submit" value="Simpan">
     </form>
 @endsection
